@@ -20,9 +20,7 @@
  */
 
 #include "ndn-cxx/util/logger.hpp"
-#include "ndn-cxx/util/logging.hpp"
-
-#include <cstring> // for std::strspn()
+#include "ndn-cxx/detail/common.hpp"
 
 namespace ndn {
 namespace util {
@@ -73,48 +71,6 @@ parseLogLevel(const std::string& s)
     return LogLevel::ALL;
 
   NDN_THROW(std::invalid_argument("unrecognized log level '" + s + "'"));
-}
-
-/**
- * \brief checks if incoming logger name meets criteria
- * \param name name of logger
- */
-static bool
-isValidLoggerName(const std::string& name)
-{
-  // acceptable characters for Logger name
-  const char* okChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~#%_<>.-";
-  if (std::strspn(name.c_str(), okChars) != name.size()) {
-    return false;
-  }
-  if (name.empty() || name.front() == '.' || name.back() == '.') {
-    return false;
-  }
-  if (name.find("..") != std::string::npos) {
-    return false;
-  }
-  return true;
-}
-
-Logger::Logger(const char* name)
-  : m_moduleName(name)
-{
-  if (!isValidLoggerName(m_moduleName)) {
-    NDN_THROW(std::invalid_argument("Logger name '" + m_moduleName + "' is invalid"));
-  }
-  this->setLevel(LogLevel::NONE);
-  this->add_attribute(log::module.get_name(), boost::log::attributes::constant<std::string>(m_moduleName));
-  Logging::get().addLoggerImpl(*this);
-}
-
-void
-Logger::registerModuleName(const char* name)
-{
-  std::string moduleName(name);
-  if (!isValidLoggerName(moduleName)) {
-    NDN_THROW(std::invalid_argument("Logger name '" + moduleName + "' is invalid"));
-  }
-  Logging::get().registerLoggerNameImpl(std::move(moduleName));
 }
 
 } // namespace util
