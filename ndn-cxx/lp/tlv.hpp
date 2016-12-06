@@ -35,6 +35,7 @@ enum {
   Sequence = 81,
   FragIndex = 82,
   FragCount = 83,
+  HopCountTag = 84,
   PitToken = 98,
   Nack = 800,
   NackReason = 801,
