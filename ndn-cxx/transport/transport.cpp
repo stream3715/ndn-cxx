@@ -29,11 +29,10 @@ Transport::Error::Error(const boost::system::error_code& code, const std::string
 }
 
 void
-Transport::connect(boost::asio::io_service& ioService, ReceiveCallback receiveCallback)
+Transport::connect(receiveCallback receiveCallback)
 {
   BOOST_ASSERT(receiveCallback != nullptr);
 
-  m_ioService = &ioService;
   m_receiveCallback = std::move(receiveCallback);
 }
 

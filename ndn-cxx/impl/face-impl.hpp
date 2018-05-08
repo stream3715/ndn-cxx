@@ -333,8 +333,7 @@ public: // IO routine
   ensureConnected(bool wantResume)
   {
     if (!m_face.m_transport->isConnected()) {
-      m_face.m_transport->connect(m_face.getIoService(),
-                                  [this] (const Block& wire) { m_face.onReceiveElement(wire); });
+      m_face.m_transport->connect([this] (const Block& wire) { m_face.onReceiveElement(wire); });
     }
 
     if (wantResume && !m_face.m_transport->isReceiving()) {
