@@ -26,17 +26,13 @@
 #include "ndn-cxx/detail/cancel-handle.hpp"
 #include "ndn-cxx/util/time.hpp"
 
-#include <boost/system/error_code.hpp>
+#include "ns3/simulator.h"
+
 #include <set>
 
 namespace ndn {
 
 namespace util {
-namespace detail {
-class SteadyTimer;
-} // namespace detail
-} // namespace util
-
 namespace scheduler {
 
 class Scheduler;
@@ -160,12 +156,9 @@ private:
   scheduleNext();
 
   /** \brief Execute expired events
-   *
-   *  If an event callback throws, the exception is propagated to the thread running the io_service.
-   *  In case there are other expired events, they will be processed in the next invocation.
    */
   void
-  executeEvent(const boost::system::error_code& code);
+  executeEvent();
 
 private:
   class EventQueueCompare
@@ -178,8 +171,8 @@ private:
   using EventQueue = std::multiset<shared_ptr<EventInfo>, EventQueueCompare>;
   EventQueue m_queue;
 
-  unique_ptr<util::detail::SteadyTimer> m_timer;
   bool m_isEventExecuting = false;
+  ndn::optional<ns3::EventId> m_timerEvent;
 
   friend EventId;
   friend EventInfo;
