@@ -301,7 +301,7 @@ NDN_CXX_PUBLIC_WITH_TESTS_ELSE_PRIVATE:
   Scheduler m_scheduler;
   security::v2::Validator& m_validator;
   RttEstimator m_rttEstimator;
-  time::milliseconds m_timeout;
+  // time::milliseconds m_timeout;
 
   time::steady_clock::TimePoint m_timeLastSegmentReceived;
   std::queue<uint64_t> m_retxQueue;

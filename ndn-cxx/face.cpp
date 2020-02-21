@@ -39,7 +39,7 @@
 #define IO_CAPTURE_WEAK_IMPL(OP) \
   { \
     weak_ptr<Impl> implWeak(m_impl); \
-    m_impl->m_scheduler.scheduleEvent(time::seconds(0), [=] { \
+    m_impl->m_scheduler.schedule(time::seconds(0), [=] { \
       auto impl = implWeak.lock(); \
       if (impl != nullptr) {
 #define IO_CAPTURE_WEAK_IMPL_END \

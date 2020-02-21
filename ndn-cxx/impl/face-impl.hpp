@@ -69,7 +69,7 @@ public:
     , m_nfdController(m_face, keyChain)
   {
     auto postOnEmptyPitOrNoRegisteredPrefixes = [this] {
-      m_scheduler.scheduleEvent(time::seconds(0), bind(&Impl::onEmptyPitOrNoRegisteredPrefixes, this));
+      m_scheduler.schedule(time::seconds(0), bind(&Impl::onEmptyPitOrNoRegisteredPrefixes, this));
       // without this extra "post", transport can get paused (-async_read) and then resumed
       // (+async_read) from within onInterest/onData callback.  After onInterest/onData
       // finishes, there is another +async_read with the same memory block.  A few of such

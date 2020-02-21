@@ -29,7 +29,7 @@ Transport::Error::Error(const boost::system::error_code& code, const std::string
 }
 
 void
-Transport::connect(receiveCallback receiveCallback)
+Transport::connect(ReceiveCallback receiveCallback)
 {
   BOOST_ASSERT(receiveCallback != nullptr);
 

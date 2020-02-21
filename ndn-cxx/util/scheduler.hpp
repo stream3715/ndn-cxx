@@ -33,6 +33,8 @@
 namespace ndn {
 
 namespace util {
+} // namespace util
+
 namespace scheduler {
 
 class Scheduler;
