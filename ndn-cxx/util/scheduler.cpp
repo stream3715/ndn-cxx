@@ -115,13 +115,11 @@ Scheduler::cancelImpl(const shared_ptr<EventInfo>& info)
     return;
   }
 
-  if (info->queueIt == m_queue.begin()) {
-    if (m_timerEvent) {
-      if (!m_timerEvent->IsExpired()) {
-        ns3::Simulator::Remove(*m_timerEvent);
-      }
-      m_timerEvent.reset();
+  if (m_timerEvent) {
+    if (!m_timerEvent->IsExpired()) {
+      ns3::Simulator::Remove(*m_timerEvent);
     }
+    m_timerEvent.reset();
   }
   m_queue.erase(info->queueIt);
 
