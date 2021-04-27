@@ -23,6 +23,7 @@
 #define NDN_DATA_HPP
 
 #include "ndn-cxx/meta-info.hpp"
+#include "ndn-cxx/send-info.hpp"
 #include "ndn-cxx/name.hpp"
 #include "ndn-cxx/signature.hpp"
 #include "ndn-cxx/detail/packet-base.hpp"
@@ -239,6 +240,7 @@ private:
   MetaInfo m_metaInfo;
   Block m_content;
   Signature m_signature;
+  SendInfo m_sendInfo;
 
   mutable Block m_wire;
   mutable Name m_fullName; ///< cached FullName computed from m_wire

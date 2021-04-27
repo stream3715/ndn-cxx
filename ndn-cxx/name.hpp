@@ -155,6 +155,14 @@ public: // access
     return m_wire.elements_size();
   }
 
+  /** @brief Returns the Protocol of Name.
+   */
+  std::string
+  getProtocol() const
+  {
+    return m_protocol;
+  }
+
   /** @brief Returns an immutable reference to the component at the specified index.
    *  @param i zero-based index of the component to return;
    *           if negative, it is interpreted as offset from the end of the name
@@ -659,6 +667,7 @@ public:
 
 private:
   mutable Block m_wire;
+  std::string m_protocol;
 };
 
 NDN_CXX_DECLARE_WIRE_ENCODE_INSTANTIATIONS(Name);

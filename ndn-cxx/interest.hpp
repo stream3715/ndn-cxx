@@ -117,6 +117,10 @@ public: // matching
   matchesInterest(const Interest& other) const;
 
 public: // element access
+
+  std::string
+  getProtocol() const;
+
   const Name&
   getName() const noexcept
   {
@@ -331,6 +335,34 @@ public: // element access
   Interest&
   unsetApplicationParameters();
 
+  const Name&
+  getDestinationNodeID() const noexcept
+  {
+    return m_destid;
+  }
+
+  Interest&
+  setDestinationNodeID(Name destid)
+  {
+    m_destid = destid;
+    m_wire.reset();
+    return *this;
+  }
+
+  const Name&
+  getAgentNodeID() const noexcept
+  {
+    return m_destid;
+  }
+
+  Interest&
+  setAgentNodeID(Name agentid)
+  {
+    m_agentid = agentid;
+    m_wire.reset();
+    return *this;
+  }
+
 public: // ParametersSha256DigestComponent support
   static bool
   getAutoCheckParametersDigest()
@@ -408,6 +440,9 @@ private:
   std::vector<Block> m_parameters;
 
   mutable Block m_wire;
+
+  mutable Name m_destid;
+  mutable Name m_agentid;
 };
 
 NDN_CXX_DECLARE_WIRE_ENCODE_INSTANTIATIONS(Interest);

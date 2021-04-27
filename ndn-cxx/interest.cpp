@@ -125,6 +125,14 @@ Interest::wireEncode(EncodingImpl<TAG>& encoder) const
     totalLength += encoder.prependBlock(b);
   });
 
+  // AgentNodeID
+  if (!getAgentNodeID().empty()) {
+    totalLength += getAgentNodeID().wireEncode(encoder);
+  }
+
+  // DestinationNodeID
+  totalLength += getDestinationNodeID().wireEncode(encoder);
+
   // HopLimit
   if (getHopLimit()) {
     uint8_t hopLimit = *getHopLimit();
@@ -297,6 +305,24 @@ Interest::wireDecode(const Block& wire)
         BOOST_ASSERT(!hasApplicationParameters());
         m_parameters.push_back(*element);
         lastElement = 8;
+        break;
+      }
+      case tlv::DestinationNodeID: {
+        if (lastElement >= 9) {
+          NDN_THROW(Error("DestinationNodeID element is out of order"));
+        }
+        Name destName(*element);
+        m_destid = destName;
+        lastElement = 9;
+        break;
+      }
+      case tlv::AgentNodeID: {
+        if (lastElement >= 10) {
+          NDN_THROW(Error("AgentNodeID element is out of order"));
+        }
+        Name agentName(*element);
+        m_agentid = agentName;
+        lastElement = 10;
         break;
       }
       default: { // unrecognized element
@@ -518,10 +544,15 @@ Interest::unsetApplicationParameters()
   return *this;
 }
 
+std::string
+Interest::getProtocol() const
+{
+  return m_name.getProtocol();
+}
+
 // ---- ParametersSha256DigestComponent support ----
 
-bool
-Interest::isParametersDigestValid() const
+bool Interest::isParametersDigestValid() const
 {
   ssize_t digestIndex = findParametersDigestComponent(getName());
   if (digestIndex == -1) {

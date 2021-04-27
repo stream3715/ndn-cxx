@@ -87,6 +87,11 @@ enum : uint32_t {
   KeyDigest                       = 29,
   LinkDelegation                  = 31,
   LinkPreference                  = 30,
+  DestinationNodeID               = 72,
+  AgentNodeID                     = 73,
+  SendInfo                        = 74,
+  SendType                        = 75,
+  SendDestination                 = 76,
 
   NameComponentMin = 1,
   NameComponentMax = 65535,
@@ -165,6 +170,16 @@ enum ContentTypeValue : uint32_t {
 
 std::ostream&
 operator<<(std::ostream& os, ContentTypeValue ct);
+
+/** @brief SendType values
+ */
+enum SendTypeValue : uint32_t {
+  SendType_Normal      = 0,    ///< to Consumer
+  SendType_Share       = 1,    ///< to other Agent Nodes
+};
+
+std::ostream&
+operator<<(std::ostream& os, SendTypeValue st);
 
 /**
  * @brief Determine whether a TLV-TYPE is "critical" for evolvability purpose.
