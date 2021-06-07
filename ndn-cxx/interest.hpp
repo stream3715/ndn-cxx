@@ -304,6 +304,14 @@ class Interest : public PacketBase,
     return *this;
   }
 
+  const Name& getContentName() const noexcept { return m_contentname; }
+
+  Interest& setContentName(Name contentName) {
+    m_contentname = contentName;
+    m_wire.reset();
+    return *this;
+  }
+
  public:  // ParametersSha256DigestComponent support
   static bool getAutoCheckParametersDigest() {
     return s_autoCheckParametersDigest;
@@ -376,8 +384,9 @@ class Interest : public PacketBase,
 
   mutable Block m_wire;
 
-  mutable Name m_destid;
-  mutable Name m_agentid;
+  mutable Name m_destid; // 当座の行き先
+  mutable Name m_agentid; // NDN探索時のAgent Node保持用
+  mutable Name m_contentname; // Kademlia時のContent Name保持用
 };
 
 NDN_CXX_DECLARE_WIRE_ENCODE_INSTANTIATIONS(Interest);

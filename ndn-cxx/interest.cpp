@@ -134,7 +134,13 @@ size_t Interest::wireEncode(EncodingImpl<TAG>& encoder) const {
   }
 
   // DestinationNodeID
-  totalLength += getDestinationNodeID().wireEncode(encoder);
+  if(!getDestinationNodeID().empty()) {
+    totalLength += getDestinationNodeID().wireEncode(encoder);
+  }
+
+  if(!getContentName().empty()) {
+    totalLength += getContentName().wireEncode(encoder);
+  }
 
   // HopLimit
   if(getHopLimit()) {
@@ -328,6 +334,15 @@ void Interest::wireDecode(const Block& wire) {
         Name agentName(*element);
         m_agentid = agentName;
         lastElement = 10;
+        break;
+      }
+      case tlv::ContentName: {
+        if(lastElement >= 11) {
+          NDN_THROW(Error("ContentName element is out of order"));
+        }
+        Name contentName(*element);
+        m_contentname = contentName;
+        lastElement = 11;
         break;
       }
       default: {  // unrecognized element
