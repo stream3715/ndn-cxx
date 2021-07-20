@@ -113,7 +113,9 @@ class Interest : public PacketBase,
   bool matchesInterest(const Interest& other) const;
 
  public:  // element access
-  std::string getProtocol() const;
+  const Name& getProtocol() const noexcept { return m_protocol; }
+
+  Interest& setProtocol(const std::string protocol);
 
   const Name& getName() const noexcept { return m_name; }
 
@@ -384,9 +386,10 @@ class Interest : public PacketBase,
 
   mutable Block m_wire;
 
-  mutable Name m_destid; // 当座の行き先
-  mutable Name m_agentid; // NDN探索時のAgent Node保持用
-  mutable Name m_contentname; // Kademlia時のContent Name保持用
+  mutable Name m_destid;           // 当座の行き先
+  mutable Name m_agentid;          // NDN探索時のAgent Node保持用
+  mutable Name m_contentname;      // Kademlia時のContent Name保持用
+  mutable Name m_protocol;  // Kademlia時のContent Name保持用
 };
 
 NDN_CXX_DECLARE_WIRE_ENCODE_INSTANTIATIONS(Interest);

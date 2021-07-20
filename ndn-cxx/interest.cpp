@@ -56,6 +56,7 @@ bool Interest::s_autoCheckParametersDigest = true;
 
 Interest::Interest(const Name& name, time::milliseconds lifetime) {
   setName(name);
+  setProtocol("kademlia");
   setInterestLifetime(lifetime);
 
   if(!boost::logic::indeterminate(s_defaultCanBePrefix)) {
@@ -127,6 +128,11 @@ size_t Interest::wireEncode(EncodingImpl<TAG>& encoder) const {
   std::for_each(
       m_parameters.rbegin(), m_parameters.rend(),
       [&](const Block& b) { totalLength += encoder.prependBlock(b); });
+
+  // AgentNodeID
+  if(!getProtocol().empty()) {
+    totalLength += getProtocol().wireEncode(encoder);
+  }
 
   // AgentNodeID
   if(!getAgentNodeID().empty()) {
@@ -345,6 +351,15 @@ void Interest::wireDecode(const Block& wire) {
         lastElement = 11;
         break;
       }
+      case tlv::Protocol: {
+        if(lastElement >= 12) {
+          NDN_THROW(Error("Protocol element is out of order"));
+        }
+        Name protocol(*element);
+        m_protocol = protocol;
+        lastElement = 12;
+        break;
+      }
       default: {  // unrecognized element
         // if the TLV-TYPE is critical, abort decoding
         if(tlv::isCriticalType(element->type())) {
@@ -413,6 +428,12 @@ bool Interest::matchesInterest(const Interest& other) const {
 }
 
 // ---- field accessors and modifiers ----
+
+Interest& setProtocol(const std::string protocol) {
+  m_protocol = Name(protocol);
+  m_wire.reset();
+  return *this;
+};
 
 Interest& Interest::setName(const Name& name) {
   ssize_t digestIndex = findParametersDigestComponent(name);
@@ -539,8 +560,6 @@ Interest& Interest::unsetApplicationParameters() {
   m_wire.reset();
   return *this;
 }
-
-std::string Interest::getProtocol() const { return m_name.getProtocol(); }
 
 // ---- ParametersSha256DigestComponent support ----
 

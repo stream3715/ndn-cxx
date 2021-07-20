@@ -93,6 +93,7 @@ enum : uint32_t {
   SendType                        = 75,
   SendDestination                 = 76,
   ContentName                     = 77,
+  Protocol                        = 78,
 
   NameComponentMin = 1,
   NameComponentMax = 65535,
