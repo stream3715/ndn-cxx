@@ -71,8 +71,6 @@ Name::Name(std::string uri) {
     size_t iFirstSlash = uri.find('/');
     if(iFirstSlash == std::string::npos || iColon < iFirstSlash) {
       // Omit the leading protocol such as ndn:
-      std::string tmpName = uri;
-      m_protocol = tmpName.erase(iColon, npos);
       uri.erase(0, iColon + 1);
     }
   }

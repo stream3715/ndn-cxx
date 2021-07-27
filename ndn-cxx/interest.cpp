@@ -429,7 +429,7 @@ bool Interest::matchesInterest(const Interest& other) const {
 
 // ---- field accessors and modifiers ----
 
-Interest& setProtocol(const std::string protocol) {
+Interest& Interest::setProtocol(const std::string protocol) {
   m_protocol = Name(protocol);
   m_wire.reset();
   return *this;
